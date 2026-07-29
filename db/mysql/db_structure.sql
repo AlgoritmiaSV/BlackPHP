@@ -438,6 +438,37 @@ CREATE TABLE `entity_options` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Temporary table structure for view `installation_data`
+--
+
+DROP TABLE IF EXISTS `installation_data`;
+/*!50001 DROP VIEW IF EXISTS `installation_data`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8mb4;
+/*!50001 CREATE VIEW `installation_data` AS SELECT
+ 1 AS `entity_id`,
+  1 AS `entity_name`,
+  1 AS `entity_slogan`,
+  1 AS `admin_role`,
+  1 AS `admin_user`,
+  1 AS `entity_begin`,
+  1 AS `entity_subdomain`,
+  1 AS `app_name`,
+  1 AS `default_locale`,
+  1 AS `creation_installer`,
+  1 AS `creation_time`,
+  1 AS `edition_installer`,
+  1 AS `installer_edition_time`,
+  1 AS `edition_user`,
+  1 AS `user_edition_time`,
+  1 AS `status`,
+  1 AS `user_id`,
+  1 AS `user_name`,
+  1 AS `nickname`,
+  1 AS `email` */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `login_attemps`
 --
 
@@ -736,6 +767,24 @@ CREATE TABLE `users` (
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 */
 /*!50001 VIEW `entity_data` AS select `entities`.`entity_id` AS `entity_id`,`entities`.`entity_name` AS `entity_name`,`entities`.`entity_slogan` AS `entity_slogan`,`entities`.`admin_role` AS `admin_role`,`entities`.`admin_user` AS `admin_user`,`entities`.`entity_begin` AS `entity_begin`,`entities`.`entity_subdomain` AS `entity_subdomain`,`entities`.`app_name` AS `app_name`,`entities`.`default_locale` AS `default_locale`,`entities`.`creation_installer` AS `creation_installer`,`entities`.`creation_time` AS `creation_time`,`entities`.`edition_installer` AS `edition_installer`,`entities`.`installer_edition_time` AS `installer_edition_time`,`entities`.`edition_user` AS `edition_user`,`entities`.`user_edition_time` AS `user_edition_time`,`entities`.`status` AS `status` from `entities` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `installation_data`
+--
+
+/*!50001 DROP VIEW IF EXISTS `installation_data`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 */
+/*!50001 VIEW `installation_data` AS select `e`.`entity_id` AS `entity_id`,`e`.`entity_name` AS `entity_name`,`e`.`entity_slogan` AS `entity_slogan`,`e`.`admin_role` AS `admin_role`,`e`.`admin_user` AS `admin_user`,`e`.`entity_begin` AS `entity_begin`,`e`.`entity_subdomain` AS `entity_subdomain`,`e`.`app_name` AS `app_name`,`e`.`default_locale` AS `default_locale`,`e`.`creation_installer` AS `creation_installer`,`e`.`creation_time` AS `creation_time`,`e`.`edition_installer` AS `edition_installer`,`e`.`installer_edition_time` AS `installer_edition_time`,`e`.`edition_user` AS `edition_user`,`e`.`user_edition_time` AS `user_edition_time`,`e`.`status` AS `status`,`u`.`user_id` AS `user_id`,`u`.`user_name` AS `user_name`,`u`.`nickname` AS `nickname`,`u`.`email` AS `email` from (`entities` `e` left join `users` `u` on(`u`.`user_id` = `e`.`admin_user`)) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

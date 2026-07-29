@@ -281,13 +281,14 @@ class Installation extends Controller
 		$data = [];
 		if(Session::get("entity/entity_id") != null)
 		{
-			$entity = entitiesModel::get()
+			$entity = installationDataModel::get()
 				->toArray();
-			$admin_user = usersModel::find($entity["admin_user"])->toArray();
-			$data["update"] = array_merge($entity, $admin_user);
+			$data["update"] = $entity;
 			$data["check"] = [
-				"modules" => entityModulesModel::select("module_id AS id")->getAll(),
-				"methods" => entityMethodsModel::select("method_id AS id")->getAll()
+				"modules" => entityModulesModel::select("module_id AS id")
+					->getAll(),
+				"methods" => entityMethodsModel::select("method_id AS id")
+					->getAll()
 			];
 			$admin_role = rolesModel::find($entity["admin_role"]);
 			if($admin_role->exists())
@@ -296,7 +297,8 @@ class Installation extends Controller
 				$create = [];
 				$update = [];
 				$delete = [];
-				$elements = roleElementsModel::where("role_id", $admin_role->getRoleId())->getAll();
+				$elements = roleElementsModel::where("role_id", $admin_role->getRoleId())
+					->getAll();
 				foreach($elements as &$element)
 				{
 					if((intval($element->getPermissions()) & 8) != 0)
@@ -324,13 +326,17 @@ class Installation extends Controller
 			}
 			else
 			{
-				$data["check"]["read"] = appElementsModel::select("element_id AS id")->getAll();
+				$data["check"]["read"] = appElementsModel::select("element_id AS id")
+					->getAll();
 				$data["check"]["create"] = appElementsModel::select("element_id AS id")
-					->where("is_creatable", 1)->getAll();
+					->where("is_creatable", 1)
+					->getAll();
 				$data["check"]["update"] = appElementsModel::select("element_id AS id")
-					->where("is_updatable", 1)->getAll();
+					->where("is_updatable", 1)
+					->getAll();
 				$data["check"]["delete"] = appElementsModel::select("element_id AS id")
-					->where("is_deletable", 1)->getAll();
+					->where("is_deletable", 1)
+					->getAll();
 			}
 		}
 		http::json($data);
@@ -357,7 +363,8 @@ class Installation extends Controller
 			http::json($response);
 			return;
 		}
-		$installer = appInstallersModel::where("installer_nickname", $_POST["nickname"])->get();
+		$installer = appInstallersModel::where("installer_nickname", $_POST["nickname"])
+			->get();
 		if(password_verify($_POST["password"], $installer->getInstallerPassword()))
 		{
 			Session::set("authorization_code", true);
