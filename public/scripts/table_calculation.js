@@ -17,7 +17,7 @@
  * 
  * Incorporado el 2026-04-04
  */
-document.addEventListener("input", function(e) {
+function calculationEvent(e) {
 	if (e.target.classList.contains("calculate_row")) {
 		const tbody = e.target.closest("tbody");
 		const rowCalcFn = tbody.dataset.rowCalculation;
@@ -33,7 +33,10 @@ document.addEventListener("input", function(e) {
 			window[tableCalcFn](tbody);
 		}
 	}
-});
+};
+
+document.addEventListener("input", calculationEvent);
+$(document).on('change', '.calculate_row', calculationEvent);
 
 document.addEventListener('DOMContentLoaded', function (){
 	document.querySelectorAll(".add_row_button").forEach(button => {
@@ -74,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function (){
 			// Clear inputs and spans
 			newRow.querySelectorAll("input").forEach(input => input.value = "");
 			newRow.querySelectorAll("select").forEach(select => select.value = "");
+			newRow.querySelectorAll("textarea").forEach(input => input.value = "");
 			newRow.querySelectorAll(".clearable").forEach(span => span.textContent = "");
 
 			// Valores completos y parciales

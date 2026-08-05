@@ -77,7 +77,7 @@ tr:hover .action_icon
 
 .details_table input
 {
-	width: calc(100% - 10px) !important;
+	width: 100% !important;
 	border: 0px;
 	box-shadow: none;
 	outline: 0px;
@@ -331,6 +331,7 @@ tr:hover .action_icon
 .complete_value
 {
 	display: none;
+	white-space: pre;
 }
 
 .image-uploader

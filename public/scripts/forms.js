@@ -190,13 +190,20 @@ $(function()
 						// calc_row_total(_tr);
 						container.append(_tr);
 						_tr.find("input").first().trigger("focus");
-						/* Partial values */
-						//_tr.find(".complete_value").text(value.element_name);
+
+						/** 
+						 * Valores parciales
+						 * 
+						 * Normalmente los inputs no muestran el texto completo de un ítem
+						 * si es demasiado largo, por lo que se agrega un div antes del input
+						 * para mostrar el valor completo.
+						 */
 						_tr.find(".complete_value").on("click", complete_click);
 						_tr.find(".complete_value").css("display", "block");
 						_tr.find(".partial_value").hide();
 						_tr.find(".partial_value").on("blur", partial_blur);
 						_tr.find(".partial_value").on("change", partial_change);
+
 						/* Generics */
 						_tr.find(".row_generics").text("");
 
@@ -381,6 +388,7 @@ $(function()
 		div_success = $(this).siblings(".success");
 		div_error = $(this).siblings(".error");
 		div_sending.show();
+		$(window).scrollTop(div_sending.offset().top);
 		close_dialog = $(this).data("close_dialog");
 		add_selector = $(this).data("selector");
 		last_form = $(this);
@@ -1049,18 +1057,14 @@ $(function()
 		if($(this).val().length > 0)
 		{
 			// Separación de código del resto del texto
-
 			let complete_text = $(this).val().trim();
-
-			// Regex: capture leading digits and the rest of the text
 			let match = complete_text.match(/^\d+\s+(.*)$/);
-
 			if (match)
 			{
 				complete_text = match[1];
 			}
-
 			// Fin de separación de código
+
 			$(this).siblings(".complete_value").html(complete_text);
 			$(this).siblings(".complete_value").css("display", "block");
 			$(this).hide();
