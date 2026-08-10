@@ -388,7 +388,10 @@ $(function()
 		div_success = $(this).siblings(".success");
 		div_error = $(this).siblings(".error");
 		div_sending.show();
-		$(window).scrollTop(div_sending.offset().top);
+		if (div_sending.length && div_sending.offset() !== undefined)
+		{
+			$(window).scrollTop(div_sending.offset().top);
+		}
 		close_dialog = $(this).data("close_dialog");
 		add_selector = $(this).data("selector");
 		last_form = $(this);

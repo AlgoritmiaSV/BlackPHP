@@ -289,6 +289,20 @@ class User extends Controller
 		$this->session_required();
 		$this->view->data["title"] = _("My account");
 		$this->view->standard_form();
+		$this->view->add("scripts", "js", [
+			"public/scripts/profile.js"
+		]);
+		$this->view->add("styles", "css", [
+			"public/styles/profile.css"
+		]);
+
+		$profileImage = "entities/" . Session::get("entity/entity_subdomain") . "/users/" . Session::get("user_id") . "-profile.jpg";
+		if(!file_exists($profileImage))
+		{
+			$profileImage = "public/images/user.png";
+		}
+		$this->view->data["profile_image"] = $profileImage;
+
 		$this->view->data["nav"] = $this->view->render("main/nav", true);
 		$this->view->data["content"] = $this->view->render("user/my_account", true);
 		$this->view->render('main');
@@ -304,7 +318,7 @@ class User extends Controller
 	public function SaveMyAccount()
 	{
 		$this->session_required("json");
-		$response = ["success" => false];
+
 		$user = usersModel::find(Session::get("user_id"));
 		if($_POST["theme_id"] != Session::get("theme_id"))
 		{
@@ -325,14 +339,35 @@ class User extends Controller
 			Session::set("user_name", $_POST["user_name"]);
 		}
 		$user->save();
-		$response["success"] = true;
-		$response += [
+
+		$dir = "entities/" . Session::get("entity/entity_subdomain") . "/";
+		if($_SERVER["SERVER_NAME"] == $_SERVER["SERVER_ADDR"])
+		{
+			$dir = "entities/local/";
+		}
+		$dir .= "users/";
+		if(!is_dir($dir))
+		{
+			mkdir($dir, 0755, true);
+		}
+
+		if(!empty($_FILES["profile"]["name"]))
+		{
+			$file = $dir . Session::get("user_id") . "-profile.jpg";
+			if(file_exists($file))
+			{
+				unlink($file);
+			}
+			move_uploaded_file($_FILES["profile"]["tmp_name"], $file);
+		}
+
+		http::json([
+			"success" => true,
 			"reload_after" => true,
 			"title" => _("Success"),
 			"message" => _("Changes have been saved"),
 			"theme" => "green"
-		];
-		http::json($response);
+		]);
 	}
 
 	/**
@@ -345,7 +380,6 @@ class User extends Controller
 	public function ChangePassword()
 	{
 		$this->session_required("json");
-		$response = ["success" => false];
 		$user = usersModel::find(Session::get("user_id"));
 		if(md5($_POST["current_password"]) != $user->getPassword() && !password_verify($_POST["current_password"], $user->getPasswordHash()))
 		{

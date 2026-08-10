@@ -31,6 +31,13 @@
 					<select class="data_selector update_input" name="locale" data-source="locales" data-search="false" data-placeholder="_(Select)">
 					</select>
 				</div>
+				<div class="form_entry">
+					<label>_(Profile photo):</label>
+					<input type="file" name="profile" id="photoInput" accept="image/*">
+					<div id="preview" class="preview">
+						<img src="{{ profile_image }}">
+					</div>
+				</div>
 			</div>
 			<div class="form_foot">
 				<span class="button_group">

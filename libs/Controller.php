@@ -102,22 +102,6 @@ class Controller
 		#5 Error reporting
 		error_reporting(E_ERROR | E_PARSE);
 
-		#6 Verificación de usuario
-		if(Session::get("user_id") != null)
-		{
-			$this->view->data["user_name"] = Session::get("user_name");
-			$this->view->data["nickname"] = Session::get("nickname");
-			$this->view->data["user_photo"] = "public/images/user.png";
-		}
-		elseif(Session::get("installer_id") == null)
-		{
-			$this->view->restrict = array("user");
-		}
-		else
-		{
-			$this->view->data["user_photo"] = "public/images/user.png";
-		}
-
 		#7 Sistema en mantenimiento
 		if(defined('SYSTEM_STATUS') && SYSTEM_STATUS == 'MAINTENANCE')
 		{
@@ -210,6 +194,25 @@ class Controller
 			$logo = "public/images/default_image.png";
 		}
 		$this->view->data["entity_logo"] = $logo . "?t=" . filemtime($logo);
+
+		#6 Verificación de usuario
+		$userPhoto = "public/images/user.png";
+		if(Session::get("user_id") != null)
+		{
+			$this->view->data["user_name"] = Session::get("user_name");
+			$this->view->data["nickname"] = Session::get("nickname");
+
+			$profilePhoto = $this->store_dir . "users/" . Session::get("user_id") . "-profile.jpg";
+			if(file_exists($profilePhoto))
+			{
+				$userPhoto = $profilePhoto;
+			}
+		}
+		elseif(Session::get("installer_id") == null)
+		{
+			$this->view->restrict = array("user");
+		}
+		$this->view->data["user_photo"] = $userPhoto;
 
 		# Entity vars are always available in the views
 		foreach($entity as $key => $item)

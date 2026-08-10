@@ -226,6 +226,11 @@
 	vertical-align: top;
 }
 
+#user_link img, .user_icon img
+{
+	border-radius: 50%;
+}
+
 #user_link .user_name
 {
 	padding: 10px 0px;
@@ -932,6 +937,7 @@ input:checked + .slider:before
 .user_photo
 {
 	width: 150px;
+	border-radius: 50%;
 }
 
 #user_nickname

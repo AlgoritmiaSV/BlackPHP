@@ -158,15 +158,13 @@ trait Users
 		$this->view->data["sessions"] = $sessions;
 
 		#User photo
-		$photo = glob("entities/" . Session::get("entity/entity_subdomain") . "/users/profile_" . $user["user_id"] . ".*");
-		if(count($photo) > 0)
+		$photo = $this->store_dir . "users/" . $user["user_id"] . "-profile.jpg";
+		if(!file_exists($photo))
 		{
-			$this->view->data["user_photo"] = $photo[0];
+			$photo = "public/images/user.png";
 		}
-		else
-		{
-			$this->view->data["user_photo"] = "public/images/user.png";
-		}
+		$this->view->data["user_photo"] = $photo;
+
 		$this->userActions($user);
 		if($user_id == Session::get("user_id"))
 		{
