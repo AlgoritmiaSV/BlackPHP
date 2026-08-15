@@ -5,11 +5,15 @@
  * @author Edwin Fajardo
  */
 
-// building_entry_selector = true;
 build_selectors = function()
 {
+	entrySelectors = 0;
 	$(".data_selector:not(.select2-hidden-accessible)").each(function() {
-		var selector = $(this);
+		let selector = $(this);
+		if(selector.hasClass("entry_selector"))
+		{
+			entrySelectors++;
+		}
 		if($(window).width() < 900)
 		{
 			selector.data("width", "100%");
@@ -22,8 +26,8 @@ build_selectors = function()
 				item = $(document.createElement("option"));
 				item.appendTo(selector);
 			}
-			var language = $("html").first().attr("lang");
-			var select_params = {
+			let language = $("html").first().attr("lang");
+			let select_params = {
 				data: data,
 				dropdownAutoWidth: true,
 				placeholder: selector.data("placeholder") || "",
@@ -59,12 +63,10 @@ build_selectors = function()
 			}
 		}
 	});
-/*	if(building_entry_selector)
+	if(entrySelectors > 0)
 	{
-		$("#bill_type").trigger("change");
-	}*/
-	$(".entry_selector").trigger("change");
-//	building_entry_selector = false;
+		$(".entry_selector").trigger("change");
+	}
 }
 
 /**
@@ -957,8 +959,8 @@ $(function()
 	 */
 	$(".entry_selector").on("change", function(e) {
 		var value = $(e.target).val();
-		var hidden_entries = $(".hidden_entry");
-		var visible_entries = $(".entry_type_" + value);
+		var hidden_entries = $(".hidden_entry, .no_entry_type_" + value);
+		var visible_entries = $(".entry_type_" + value + ", .visible_entry:not(.no_entry_type_" + value + ")");
 		if($(this).data("target") != null)
 		{
 			var target = $($(this).data("target"));
@@ -967,17 +969,9 @@ $(function()
 		}
 		hidden_entries.hide();
 		hidden_entries.find("input").each(function() {
-			/*if(!building_entry_selector)
-			{*/
-				//$(this).val("");
-			//}
 			$(this).removeAttr("required");
 		});
 		hidden_entries.find("select").each(function() {
-			/*if(!building_entry_selector)
-			{*/
-				//$(this).val("");
-			//}
 			$(this).removeAttr("required");
 		});
 		visible_entries.show();
@@ -992,6 +986,9 @@ $(function()
 			{
 				$(this).attr("required", true);
 			}
+		});
+		$(visible_entries).find(".notes").each(function() {
+			$(this).css("height", "60px");
 		});
 	});
 	$(".entry_selector").each(function() {
