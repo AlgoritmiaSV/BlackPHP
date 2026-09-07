@@ -139,6 +139,21 @@ CREATE TABLE `app_modules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `app_option_categories`
+--
+
+DROP TABLE IF EXISTS `app_option_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `app_option_categories` (
+  `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Llave primaria',
+  `category_name` varchar(64) NOT NULL COMMENT 'Nombre de la categoría',
+  `category_key` varchar(32) NOT NULL COMMENT 'Código de categoría',
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Categorías de las preferencias';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `app_option_values`
 --
 
@@ -165,6 +180,7 @@ DROP TABLE IF EXISTS `app_options`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `app_options` (
   `option_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Llave primaria',
+  `category_id` int(11) DEFAULT NULL COMMENT 'ID de la categoría',
   `option_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT 'Tipo de variable: 1: Booleana; 2: Valor',
   `option_key` varchar(32) NOT NULL COMMENT 'Clave de la opción',
   `option_description` tinytext NOT NULL COMMENT 'Descripción de la opción',
@@ -173,6 +189,8 @@ CREATE TABLE `app_options` (
   PRIMARY KEY (`option_id`),
   UNIQUE KEY `unique_option_key` (`option_key`),
   KEY `option_module` (`module_id`),
+  KEY `option_category` (`category_id`),
+  CONSTRAINT `option_category` FOREIGN KEY (`category_id`) REFERENCES `app_option_categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `option_module` FOREIGN KEY (`module_id`) REFERENCES `app_modules` (`module_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Opciones de la aplicación, configurables por entidad';
 /*!40101 SET character_set_client = @saved_cs_client */;

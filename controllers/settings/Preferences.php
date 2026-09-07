@@ -16,48 +16,26 @@ trait Preferences
 		$this->view->data["nav"] = $this->view->render("main/nav", true);
 		$this->view->data["config_modules"] = Array();
 
-		# Módulo principal
-		# Debería haber un módulo principal registrado en la base de datos; pero esto se verá en próximas versiones
-		$switches = entityOptionsModel::join("app_options", "option_id")->where("module_id IS NULL")->where("option_type", 1)->getAllArray();
-		$fields = entityOptionsModel::join("app_options", "option_id")->where("module_id IS NULL")->where("option_type", 2)->getAllArray();
-		$selectors = entityOptionsModel::join("app_options", "option_id")->where("module_id IS NULL")->where("option_type", 3)->getAllArray();
-		$numbers = entityOptionsModel::join("app_options", "option_id")->where("module_id IS NULL")->where("option_type", 4)->getAllArray();
-		foreach($switches as &$item)
-		{
-			$item["option_description"] = _($item["option_description"]);
-		}
-		foreach($fields as &$item)
-		{
-			$item["option_description"] = _($item["option_description"]);
-		}
-		foreach($selectors as &$item)
-		{
-			$item["option_description"] = _($item["option_description"]);
-		}
-		foreach($numbers as &$item)
-		{
-			$item["option_description"] = _($item["option_description"]);
-		}
-		unset($item);
-		if(count($switches) + count($fields) + count($selectors) + count($numbers) > 0)
-		{
-			$this->view->data["switches"] = $switches;
-			$this->view->data["fields"] = $fields;
-			$this->view->data["selectors"] = $selectors;
-			$this->view->data["numbers"] = $numbers;
-			$this->view->data["config_modules"][] = [
-				"module_name" => _("Main module"),
-				"preferences" => $this->view->render("settings/preference_item", true)
-			];
-		}
-		# Fin de módulo principal
+		$categories = appOptionCategoriesModel::getAll();
 
-		foreach($this->view->data["modules"] as $key => $module)
+		foreach($categories as $category)
 		{
-			$switches = entityOptionsModel::join("app_options", "option_id")->where("module_id", $module["module_id"])->where("option_type", 1)->getAllArray();
-			$fields = entityOptionsModel::join("app_options", "option_id")->where("module_id", $module["module_id"])->where("option_type", 2)->getAllArray();
-			$selectors = entityOptionsModel::join("app_options", "option_id")->where("module_id", $module["module_id"])->where("option_type", 3)->getAllArray();
-			$numbers = entityOptionsModel::join("app_options", "option_id")->where("module_id", $module["module_id"])->where("option_type", 4)->getAllArray();
+			$switches = entityOptionsModel::join("app_options", "option_id")
+				->where("category_id", $category->getCategoryId())
+				->where("option_type", 1)
+				->getAllArray();
+			$fields = entityOptionsModel::join("app_options", "option_id")
+				->where("category_id", $category->getCategoryId())
+				->where("option_type", 2)
+				->getAllArray();
+			$selectors = entityOptionsModel::join("app_options", "option_id")
+				->where("category_id", $category->getCategoryId())
+				->where("option_type", 3)
+				->getAllArray();
+			$numbers = entityOptionsModel::join("app_options", "option_id")
+				->where("category_id", $category->getCategoryId())
+				->where("option_type", 4)
+				->getAllArray();
 			foreach($switches as &$item)
 			{
 				$item["option_description"] = _($item["option_description"]);
@@ -81,10 +59,10 @@ trait Preferences
 				$this->view->data["fields"] = $fields;
 				$this->view->data["selectors"] = $selectors;
 				$this->view->data["numbers"] = $numbers;
-				$this->view->data["config_modules"][] = Array(
-					"module_name" => $module["module_name"],
+				$this->view->data["config_modules"][] = [
+					"module_name" => $category->getCategoryName(),
 					"preferences" => $this->view->render("settings/preference_item", true)
-				);
+				];
 			}
 		}
 		$this->view->data["content"] = $this->view->render("settings/preferences", true);

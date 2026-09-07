@@ -12,6 +12,9 @@ class appOptionsModel
 	/** @var int $option_id Llave primaria */
 	private $option_id;
 
+	/** @var int $category_id ID de la categoría */
+	private $category_id;
+
 	/** @var int $option_type Tipo de variable: 1: Booleana; 2: Valor */
 	private $option_type;
 
@@ -69,6 +72,16 @@ class appOptionsModel
 	public function setOptionId($value)
 	{
 		$this->option_id = $value === null ? null : (int)$value;
+	}
+
+	public function getCategoryId()
+	{
+		return $this->category_id;
+	}
+
+	public function setCategoryId($value)
+	{
+		$this->category_id = $value === null ? null : (int)$value;
 	}
 
 	public function getOptionType()

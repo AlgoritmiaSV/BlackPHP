@@ -140,6 +140,20 @@ COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
+-- Dumping data for table `app_option_categories`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `app_option_categories` WRITE;
+/*!40000 ALTER TABLE `app_option_categories` DISABLE KEYS */;
+INSERT INTO `app_option_categories` VALUES
+(1,'Main settings','main_settings');
+/*!40000 ALTER TABLE `app_option_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
 -- Dumping data for table `app_option_values`
 --
 
@@ -163,8 +177,8 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `app_options` WRITE;
 /*!40000 ALTER TABLE `app_options` DISABLE KEYS */;
 INSERT INTO `app_options` VALUES
-(1,3,'page_header','Page header',NULL,'default_header'),
-(2,3,'table_text_wrapping','Text wrapping in tables',NULL,'table_ellipsis');
+(1,1,3,'page_header','Page header',NULL,'default_header'),
+(2,1,3,'table_text_wrapping','Text wrapping in tables',NULL,'table_ellipsis');
 /*!40000 ALTER TABLE `app_options` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
