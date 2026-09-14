@@ -89,5 +89,33 @@ class Resources extends Controller
 		}
 		http::json($manifest);
 	}
+
+	function DownloadFile()
+	{
+		$filePath = $_GET["path"];
+		if (!file_exists($filePath)) {
+			header("HTTP/1.0 404 Not Found");
+			exit("File not found.");
+		}
+
+		// Get file details
+		$fileName = basename($filePath);
+		$fileSize = filesize($filePath);
+
+		// Set headers to force download
+		header("Content-Description: File Transfer");
+		header("Content-Type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=\"" . $fileName . "\"");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: " . $fileSize);
+
+		// Clean output buffer
+		ob_clean();
+		flush();
+
+		// Read the file
+		readfile($filePath);
+		exit;
+	}
 }
 ?>

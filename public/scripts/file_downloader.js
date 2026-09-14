@@ -6,7 +6,7 @@ function FileDownloader()
 			const fileName = fileUrl.split('/').pop();
 
 			const link = document.createElement('a');
-			link.href = fileUrl;
+			link.href = "/Resources/DownloadFile/?path=" + encodeURIComponent(fileUrl);
 			link.download = fileName;
 			document.body.appendChild(link);
 			link.click();
